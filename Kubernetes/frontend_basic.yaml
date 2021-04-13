@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-basic-deployment
+  namespace: kong
+  labels:
+    app: frontend-basic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-basic
+  template:
+    metadata:
+      labels:
+        app: frontend-basic
+    spec:
+      containers:
+      - name: frontend-basic
+        image: scubagrant60/apitest-images:frontend
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: kong
+  name: frontend-basic-service
+spec:
+  type: ClusterIP  
+  selector:
+    app: frontend-basic
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
