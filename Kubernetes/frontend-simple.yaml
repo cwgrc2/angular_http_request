@@ -1,37 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: testapi
-  name: testapi
+  name: frontend-simple-deployment
   namespace: kong
+  labels:
+    app: frontend-simple
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: testapi
+      app: frontend-simple
   template:
     metadata:
       labels:
-        app: testapi
+        app: frontend-simple
     spec:
       containers:
-      - name: testapi
-        image: scubagrant60/apitest-images:backend
+      - name: frontend-simple
+        image: scubagrant60/apitest-images:frontend
         ports:
         - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: testapi
   namespace: kong
-  labels:
-    app: testapi
+  name: frontend-simple-service
 spec:
+  type: ClusterIP  
+  selector:
+    app: frontend-simple
   ports:
   - port: 80
-    name: http
     targetPort: 80
-  selector:
-    app: testapi
+    protocol: TCP
