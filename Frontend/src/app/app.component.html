@@ -1,0 +1,22 @@
+
+
+<div class="content" role="main">
+
+
+  <h3>This simple interface (v1) is used to test the connection of this frontend to 
+    backend pods in a Kubernetes Cluster.</h3>
+  <h1></h1>
+  <h1></h1>
+  <h1></h1>
+  <h1></h1>
+  <div>  <label>Enter HTTP Call: </label>
+    <input size="50" #input type="text-area" [(ngModel)]="httpString" required/>
+    <button  (click)="MakeHTTPCall()">Apply</button>
+  </div>
+
+
+</div>
+
+
+
+<router-outlet></router-outlet>
