@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: frontend-simple
-        image: scubagrant60/apitest-images:frontend
+        image: scubagrant60/simpleapp:frontend
         ports:
         - containerPort: 80
 ---
