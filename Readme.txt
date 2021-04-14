@@ -9,7 +9,7 @@ backend to redirect the call to the backend.  The following are the steps to rep
 
 
 1) We assume you will know how to run kubernetes and are on some type of kubernetes cluster
-   (AWS, Google (GKE), Linode, or minkube).  It is also assumed that you are familiar with 
+   (AWS, Google (GKE), Linode, or minikube).  It is also assumed that you are familiar with 
    kubectl commands and have kubectl and helm installed in your encironment.
 
 2) First install kong-proxy ingress with this command: 
