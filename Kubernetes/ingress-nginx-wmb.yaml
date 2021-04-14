@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-nginx
+  namespace: kong
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: simple.wmb.stratbore.com
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: frontend-simple-service
+            servicePort: 80
+    - host: gateway.wmb.stratbore.com
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: kong-proxy
+            servicePort: 80

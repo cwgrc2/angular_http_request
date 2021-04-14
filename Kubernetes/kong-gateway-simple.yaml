@@ -15,10 +15,3 @@ spec:
             name: backend-simple-service
             port:
               number: 80
-      - path: /dataapi
-        pathType: Prefix
-        backend:
-          service:
-            name: dataapi
-            port:
-              number: 80

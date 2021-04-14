@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend-simple
-        image: scubagrant60/apitest-images:backend2
+        image: scubagrant60/simpleapp:backend
         ports:
         - containerPort: 80
 ---
