@@ -1,0 +1,70 @@
+Response from Eric Gagnon to our stackoverflow at:
+
+https://stackoverflow.com/questions/66995524/communication-between-two-services-in-kubernetes-cluster-using-ingress-as-api-ga
+
+A few possibilities: 
+
+1. Pod dns misconfiguration: check if pod's first nameserver equals 
+   'kube-dns' svc ip and if search start with kong.svc.cluster.local: 
+   
+   kubectl exec -i -t -n kong frontend-simple-deployment-7b8b9cfb44-f2shk -- cat /etc/resolv.conf
+   
+	   Result: 
+			nameserver 10.128.0.10
+			search kong.svc.cluster.local svc.cluster.local cluster.local members.linode.com
+			options ndots:5
+   
+  
+   kubectl get -n kube-system svc 
+   
+	   Result: 
+			NAME       TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)                  AGE
+			kube-dns   ClusterIP   10.128.0.10   <none>        53/UDP,53/TCP,9153/TCP   55d    
+	
+	kubectl describe -n kube-system svc kube-dns	
+	
+		Result:
+				Name:              kube-dns
+				Namespace:         kube-system
+				Labels:            k8s-app=kube-dns
+								   kubernetes.io/cluster-service=true
+								   kubernetes.io/name=KubeDNS
+				Annotations:       lke.linode.com/caplke-version: v1.19.9-001
+								   prometheus.io/port: 9153
+								   prometheus.io/scrape: true
+				Selector:          k8s-app=kube-dns
+				Type:              ClusterIP
+				IP:                10.128.0.10
+				Port:              dns  53/UDP
+				TargetPort:        53/UDP
+				Endpoints:         10.2.4.10:53,10.2.4.14:53
+				Port:              dns-tcp  53/TCP
+				TargetPort:        53/TCP
+				Endpoints:         10.2.4.10:53,10.2.4.14:53
+				Port:              metrics  9153/TCP
+				TargetPort:        9153/TCP
+				Endpoints:         10.2.4.10:9153,10.2.4.14:9153
+				Session Affinity:  None
+				Events:            <none>
+   
+2. App Not using pod dns: in Node, output dns.getServers() to console 
+
+        Result:  
+			I do not understand where and how to do this.
+			
+
+3. Kong-proxy doesn't like something: set logging debug, hit the app a bunch of times, and grep logs: 
+
+   kubectl logs -n kong ingress-kong-56f8f44fd5-rwr9j | grep dataapi 
+   
+   if you see entries, at least it's getting this far... – Eric Gagnon yesterday
+   
+		Result: 
+		
+			10.2.4.11 - - [16/Apr/2021:16:03:42 +0000] "GET /test/api/test HTTP/1.1" 200 52 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36"
+			10.2.4.11 - - [16/Apr/2021:16:03:44 +0000] "GET /test/api/test HTTP/1.1" 200 52 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36"
+			10.2.4.11 - - [16/Apr/2021:16:03:45 +0000] "GET /test/api/test HTTP/1.1" 200 52 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36"
+			10.2.4.11 - - [16/Apr/2021:16:03:56 +0000] "GET /test/api/test HTTP/1.1" 200 52 "http://app-basic.cwg.stratbore.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36"
+			10.2.4.11 - - [16/Apr/2021:16:03:58 +0000] "GET /test/api/test HTTP/1.1" 200 52 "http://app-basic.cwg.stratbore.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36"
+			10.2.4.11 - - [16/Apr/2021:16:04:00 +0000] "GET /test/api/test HTTP/1.1" 200 52 "http://app-basic.cwg.stratbore.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36"
+			10.2.4.11 - - [16/Apr/2021:16:06:43 +0000] "GET /test/api/test HTTP/1.1" 200 52 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36"

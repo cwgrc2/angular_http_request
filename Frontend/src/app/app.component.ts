@@ -14,9 +14,14 @@ import { HttpClient } from '@angular/common/http';
 export class AppComponent {
   title = 'Frontend';
 
-  httpString: string = "http://kong-proxy/dataapi/api/values"
+  httpString: string = "http://kong-proxy/test/api/test"
 
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient) {
+
+    
+
+
+  }
 
 
   TestHttpCall(httpString: string) { 
@@ -28,6 +33,11 @@ export class AppComponent {
     console.log("Make http call with: " + this.httpString);
 
     try {
+
+      // Get the DNS servers per Eric Gagnon's suggestion.
+      // const dns = require('dns');
+      //console.log(dns.getServers());
+
       let promise = new Promise((resolve, reject) => {
         this.TestHttpCall(this.httpString).subscribe(data => resolve(data), error => reject(error))
       });
