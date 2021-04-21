@@ -36,7 +36,7 @@ export class AppComponent {
 
       // Get the DNS servers per Eric Gagnon's suggestion.
       // const dns = require('dns');
-      //console.log(dns.getServers());
+      // console.log(dns.getServers());
 
       let promise = new Promise((resolve, reject) => {
         this.TestHttpCall(this.httpString).subscribe(data => resolve(data), error => reject(error))
