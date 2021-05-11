@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: frontend-simple
-        image: scubagrant60/simpleapp:frontend
+        image: scubagrant60/simpleapp:frontend_clean_nginx
         ports:
         - containerPort: 80
 ---

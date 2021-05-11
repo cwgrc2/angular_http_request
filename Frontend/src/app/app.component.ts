@@ -25,7 +25,7 @@ export class AppComponent {
 
 
   TestHttpCall(httpString: string) { 
-    return this.http.get<string>(httpString);
+    return this.http.get<string[]>(httpString);
   }
 
 

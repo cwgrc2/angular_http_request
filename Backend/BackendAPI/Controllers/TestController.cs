@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System;
 
 
 namespace BackendAPI.Controllers
@@ -12,9 +13,10 @@ namespace BackendAPI.Controllers
         // GET api/test
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult<IEnumerable<string>> Get()
+        public IEnumerable<string> Get()
         {
-            return new string[] { "Successfully pinged Test controller!!" };
+            Console.WriteLine("Successfully pinged Test controller from SimpleApp Project AND Allow Any Origin 7!!");
+            return new string[] { "Successfully pinged Test controller from SimpleApp Project AND Allow Any Origin 7!!" };
         }
     }
 }

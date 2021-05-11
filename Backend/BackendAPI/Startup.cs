@@ -9,6 +9,9 @@ namespace BackendAPI
 {
     public class Startup
     {
+
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -19,6 +22,24 @@ namespace BackendAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string[] allowOrigins = new string[] {"http://localhost:4200", "https://localhost:4200", 
+                                                  "https://localhost:4200/*","http://localhost:4200/*",
+                                                  "http://localhost:5672", "http://gateway.cwg.stratbore.com",
+                                                  "http://gateway.cwg.stratbore.com/*", "https://gateway.cwg.stratbore.com",
+                                                  "http://app-basic.cwg.stratbore.com", "http://app-basic.cwg.stratbore.com/*",
+                                                  "https://app-basic.cwg.stratbore.com", "https://app-basic.cwg.stratbore.com/*"};
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins(allowOrigins)
+                                        .AllowAnyHeader()
+                                        .AllowAnyMethod();
+                });
+            });
+
             services.AddControllers();
         }
 
@@ -29,8 +50,9 @@ namespace BackendAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors(MyAllowSpecificOrigins);
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -41,5 +63,7 @@ namespace BackendAPI
                 endpoints.MapControllers();
             });
         }
+
+
     }
 }

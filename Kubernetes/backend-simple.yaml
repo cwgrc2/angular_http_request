@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend-simple
-        image: scubagrant60/simpleapp:backend
+        image: scubagrant60/simpleapp:backend_CORS9
         ports:
         - containerPort: 80
 ---

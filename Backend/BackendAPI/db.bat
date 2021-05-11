@@ -1,0 +1,1 @@
+docker build -f "c:\development\gems\simpleapp\backend\backendapi\Dockerfile" --force-rm -t simpleapp:backend_CORS9 --no-cache --label "com.microsoft.created-by=visual-studio" --label "com.microsoft.visual-studio.project-name=DataAPI" "c:\development\gems\simpleapp\backend"
